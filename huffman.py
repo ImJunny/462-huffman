@@ -6,9 +6,10 @@ class Node:
         self.left = None
         self.right = None
 
+# returns dictionary of frequency
 def buildFrequencyTable(textFile):
     frequency = {}
-    with open(textFile, 'r') as file:
+    with open(textFile) as file:
         text = file.read()
         for char in text:
             if char.isalpha():
@@ -31,7 +32,10 @@ def heapify(priorityQueue, index):
         heapify(priorityQueue, smallest)
 
 def buildPriorityQueue(frequency):
-    priorityQueue = [(freq, Node(char, freq)) for char, freq in frequency.items()]
+    priorityQueue = []
+    for char, freq in frequency.items():
+        node = Node(char, freq)
+        priorityQueue.append((freq, node))
     for i in range(len(priorityQueue) // 2 - 1, -1, -1):
         heapify(priorityQueue, i)
     return priorityQueue
@@ -57,6 +61,7 @@ def buildHuffmanTree(priorityQueue):
             heapify(priorityQueue, i)
     return priorityQueue[0][1]
 
+# returns dictionary of bits made by traversal
 def buildCodesTable(root):
     codes = {}
     def traverse(node, code=""):
@@ -67,13 +72,6 @@ def buildCodesTable(root):
             traverse(node.right, code + "1")
     traverse(root)
     return codes
-
-def encodeText(text, codes):
-    encodedText = ""
-    for char in text:
-        if char.isalpha():
-            encodedText += codes[char]
-    return encodedText
 
 # MAIN
 if __name__ == "__main__":
